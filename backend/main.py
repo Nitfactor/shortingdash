@@ -34,3 +34,12 @@ def open_position(date: Date, db: Session = Depends(get_db)):
 def foreclosure(date: Date, db: Session = Depends(get_db)):
     result = db.query(Foreclosure).filter(Foreclosure.date == date).all()
     return result
+
+@app.get("/api/eligible-securities/{date}")
+def eligible_securities(date: Date, db: Session = Depends(get_db)):
+    result = db.query(EligibleSecurities).filter(EligibleSecurities.date == date).all()
+    return result
+
+@app.get("/api/market/changes")
+def changes():
+    pass

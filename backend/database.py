@@ -11,3 +11,10 @@ Base = declarative_base()
 def create_tables():
     Base.metadata.create_all(bind=engine)
     print("Tables successfully created !")
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()

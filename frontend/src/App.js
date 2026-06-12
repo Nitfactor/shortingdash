@@ -13,7 +13,27 @@ function App() {
     <div>
       <h1>SLBM Dashboard</h1>
       <p>Records: {data.length}</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Symbol</th>
+            <th>Series</th>
+            <th>Outstanding Quantity</th>
+          </tr>
+        </thead>
+        <tbody>
+        {data.map((row) => (
+          <tr key={row.id}>
+            <td>{row.symbol}</td>
+            <td>{row.series}</td>
+            <td>{row.outstanding_quantity}</td>
+          </tr>
+        ))}
+        </tbody>
+      </table>
     </div>
+
   );
 }
 

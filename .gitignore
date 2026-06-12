@@ -8,3 +8,6 @@ venv/
 .DS_Store
 
 backend/data/
+
+frontend/node_modules/
+frontend/build/

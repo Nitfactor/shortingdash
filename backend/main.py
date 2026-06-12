@@ -5,9 +5,17 @@ from database import create_tables, get_db
 from sqlalchemy.orm import Session
 from pathlib import Path
 from services.ingest import ingest_eligible_securities, ingest_foreclosure, ingest_open_positions
+from fastapi.middleware.cors import CORSMiddleware
 
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.on_event("startup")
 def startup():

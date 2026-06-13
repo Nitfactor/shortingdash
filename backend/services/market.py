@@ -1,10 +1,10 @@
 from models import OpenPositions, EligibleSecurities, Foreclosure
 
 def get_market_data(date, db):
+
     positions = db.query(OpenPositions).filter(OpenPositions.date == date).all()
 
     symbols = {}
-
     for pos in positions:
         if pos.symbol not in symbols:
             symbols[pos.symbol] = {
@@ -12,7 +12,7 @@ def get_market_data(date, db):
                 "series_a_oi": 0,
                 "series_b_oi": 0,
                 "combined_oi": 0
-                }
+            }
         
         if pos.series.startswith("X"):
             symbols[pos.symbol]["series_b_oi"] += pos.outstanding_quantity
@@ -22,14 +22,16 @@ def get_market_data(date, db):
     for symbol in symbols:
         symbols[symbol]["combined_oi"] = symbols[symbol]["series_a_oi"] + symbols[symbol]["series_b_oi"]
 
+
     foreclosure = db.query(Foreclosure).filter(Foreclosure.date == date).all()
     foreclosure_symbols = {f.symbol for f in foreclosure}
 
+    all_eligibility = db.query(EligibleSecurities).filter(EligibleSecurities.date == date).all()
+    
+    elig_map = {e.symbol: e for e in all_eligibility}
+
     for symbol in symbols:
-        elig = db.query(EligibleSecurities).filter(
-            EligibleSecurities.date == date,
-            EligibleSecurities.symbol == symbol
-        ).first()
+        elig = elig_map.get(symbol)
 
         if elig:
             symbols[symbol]["normal_eligibility"] = elig.normal_eligibility

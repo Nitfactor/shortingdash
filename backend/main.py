@@ -26,9 +26,9 @@ def startup():
 def ingest(db: Session = Depends(get_db)):
 
     base_dir = Path(__file__).resolve().parent
-    file_path_1 = base_dir / "data" / "SLB_ELG_SEC_10062026.csv"
-    file_path_2 = base_dir / "data" / "Forclosure_SLB_20260610.CSV"
-    file_path_3 = base_dir / "data" / "slb_openpos_10062026.csv"
+    file_path_1 = base_dir / "data" / "eligible.csv"
+    file_path_2 = base_dir / "data" / "foreclosure.CSV"
+    file_path_3 = base_dir / "data" / "openpos.csv"
 
     ingest_eligible_securities(file_path=file_path_1, date=Date.today(), db=db)
     ingest_foreclosure(file_path=file_path_2, date=Date.today(), db=db)

@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from pathlib import Path
 from services.ingest import ingest_eligible_securities, ingest_foreclosure, ingest_open_positions
 from fastapi.middleware.cors import CORSMiddleware
+from services.market import get_market_data
 
 
 app = FastAPI()
@@ -48,6 +49,6 @@ def eligible_securities(date: Date, db: Session = Depends(get_db)):
     result = db.query(EligibleSecurities).filter(EligibleSecurities.date == date).all()
     return result
 
-@app.get("/api/market/changes")
-def changes():
-    pass
+@app.get("/api/market/{date}")
+def complete_market_data(date: Date, db: Session = Depends(get_db)):
+    return get_market_data(date, db)

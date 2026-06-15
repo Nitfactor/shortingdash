@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 
 const API_BASE = "http://127.0.0.1:8000";
@@ -56,7 +56,19 @@ function getChanges(today, yesterday) {
 }
 
 function MarketTable({ data }) {
+  const [expandedSymbols, setExpandedSymbols] = useState(new Set());
+
   if (!data.length) return <p className="empty">No data</p>;
+
+  const toggleRow = (symbol) => {
+    const newExpanded = new Set(expandedSymbols);
+    if (newExpanded.has(symbol)) {
+      newExpanded.delete(symbol);
+    } else {
+      newExpanded.add(symbol);
+    }
+    setExpandedSymbols(newExpanded);
+  };
 
   return (
     <table className="market-table">
@@ -91,26 +103,73 @@ function MarketTable({ data }) {
         </tr>
       </thead>
       <tbody>
-        {data.map((row) => (
-          <tr key={row.symbol}>
-            <td>{row.symbol}</td>
-            <td>{formatNumber(row.series_a_oi)}</td>
-            <td>{formatNumber(row.series_b_oi)}</td>
-            <td>{formatNumber(row.combined_oi)}</td>
-            <td>
-              {row.normal_eligibility} / {row.recall_eligibility} /{" "}
-              {row.repay_eligibility}
-            </td>
-            <td>
-              <span
-                className={`status-dot ${
-                  row.risk_status === "MANDATORY FORECLOSURE" ? "red" : "blue"
-                }`}
-              />
-              {row.risk_status}
-            </td>
-          </tr>
-        ))}
+        {data.map((row) => {
+          const isExpanded = expandedSymbols.has(row.symbol);
+          const hasBreakdown = row.series_breakdown && Object.keys(row.series_breakdown).length > 0;
+
+          return (
+            <React.Fragment key={row.symbol}>
+
+              <tr 
+                onClick={() => hasBreakdown && toggleRow(row.symbol)} 
+                style={{ cursor: hasBreakdown ? "pointer" : "default" }}
+                className={isExpanded ? "row-expanded" : ""}
+              >
+                <td>
+                  <strong>{row.symbol}</strong>
+                </td>
+                <td>{formatNumber(row.series_a_oi)}</td>
+                <td>{formatNumber(row.series_b_oi)}</td>
+                
+                <td>
+                  {hasBreakdown && (
+                    <span style={{ marginRight: "8px", display: "inline-block", width: "12px", fontSize: "10px", color: "inherit" }}>
+                      {isExpanded ? "▼" : "▶"}
+                    </span>
+                  )}
+                  {formatNumber(row.combined_oi)}
+                </td>
+
+                <td>
+                  {row.normal_eligibility} / {row.recall_eligibility} /{" "}
+                  {row.repay_eligibility}
+                </td>
+                <td>
+                  <span
+                    className={`status-dot ${
+                      row.risk_status === "MANDATORY FORECLOSURE" ? "red" : "blue"
+                    }`}
+                  />
+                  {row.risk_status}
+                </td>
+              </tr>
+
+
+              {isExpanded && hasBreakdown && (
+                <tr className="breakdown-row" style={{ backgroundColor: "#f9fafb" }}>
+                  <td colSpan="6" style={{ padding: "12px 24px" }}>
+                    <div style={{ borderLeft: "3px solid #3b82f6", paddingLeft: "12px" }}>
+                      <h4 style={{ margin: "0 0 8px 0", fontSize: "14px", color: "#4b5563" }}>Series Breakdown</h4>
+                      <table style={{ width: "auto", minWidth: "250px", fontSize: "13px" }}>
+                        <tbody>
+                          {Object.entries(row.series_breakdown).map(([series, val]) => (
+                            <tr key={series} style={{ background: "transparent" }}>
+                              <td style={{ padding: "4px 0", fontWeight: "600", color: "#6b7280" }}>Series {series}:</td>
+                          
+                              <td style={{ padding: "4px 0", textAlign: "right", fontFamily: "monospace", color: "#111827" }}>
+                                {formatNumber(val)}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </td>
+                </tr>
+              )}
+            </React.Fragment>
+          );
+        })}
       </tbody>
     </table>
   );

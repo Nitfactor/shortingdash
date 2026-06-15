@@ -11,8 +11,14 @@ def get_market_data(date, db):
                 "symbol": pos.symbol,
                 "series_a_oi": 0,
                 "series_b_oi": 0,
-                "combined_oi": 0
+                "combined_oi": 0,
+                "series_breakdown": {}
             }
+
+            ##
+        if pos.series not in symbols[pos.symbol]["series_breakdown"]:
+            symbols[pos.symbol]["series_breakdown"][pos.series] = 0
+        symbols[pos.symbol]["series_breakdown"][pos.series] += pos.outstanding_quantity
         
         if pos.series.startswith("X"):
             symbols[pos.symbol]["series_b_oi"] += pos.outstanding_quantity

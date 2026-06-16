@@ -1,13 +1,51 @@
-.env
-
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+*.pyo
+*.pyd
+.python-version
+
+# Virtual environments
 venv/
+.venv/
+
+# Env files / secrets
+.env
+.env.*
+!.env.example
+
+# Build / packaging
+build/
+dist/
 *.egg-info/
 
+# Logs
+*.log
+
+# Test / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Database / local files
+*.sqlite3
+*.db
+
+# OS / editor
 .DS_Store
+Thumbs.db
+.vscode/
+.idea/
 
-backend/data/
-
+# Frontend
 frontend/node_modules/
 frontend/build/
+frontend/dist/
+frontend/.next/
+frontend/.turbo/
+
+# Data files - never commit raw NSE files
+backend/data/
+
+# Misc
+*.swp

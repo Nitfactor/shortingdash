@@ -14,7 +14,7 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000"],
-    allow_methods=["*"],
+    allow_methods=["https://shortingdash.onrender.com"],
     allow_headers=["*"],
 )
 

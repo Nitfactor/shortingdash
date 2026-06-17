@@ -13,9 +13,14 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
-    allow_methods=["https://shortingdash.onrender.com"],
-    allow_headers=["*"],
+    allow_origins=[
+        "http://localhost:3000",
+        "http://127.0.0.1:8000",
+        "https://shortingdash.vercel.app"
+        ],
+        allow_credentials = True,
+        allow_methods=["*"],
+        allow_headers=["*"],
 )
 
 @app.on_event("startup")

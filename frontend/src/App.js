@@ -11,6 +11,7 @@ function formatApiDate(d) {
 }
 
 function formatHeadingDate(d) {
+  if (!d) return "Loading...";
   return d.toLocaleDateString("en-US", {
     weekday: "long",
     month: "long",
@@ -75,31 +76,11 @@ function MarketTable({ data }) {
       <thead>
         <tr>
           <th>Symbol</th>
-          <th>
-            Fixed (0-12)
-            <br />
-            Open Interest
-          </th>
-          <th>
-            Recallable
-            <br />
-            Open Interest
-          </th>
-          <th>
-            Combined
-            <br />
-            Total OI
-          </th>
-          <th>
-            Eligibility
-            <br />
-            (N / R / P)
-          </th>
-          <th>
-            Operational Risk
-            <br />
-            Profiler Status
-          </th>
+          <th>Fixed (0-12)<br />Open Interest</th>
+          <th>Recallable<br />Open Interest</th>
+          <th>Combined<br />Total OI</th>
+          <th>Eligibility<br />(N / R / P)</th>
+          <th>Operational Risk<br />Profiler Status</th>
         </tr>
       </thead>
       <tbody>
@@ -109,18 +90,14 @@ function MarketTable({ data }) {
 
           return (
             <React.Fragment key={row.symbol}>
-
               <tr 
                 onClick={() => hasBreakdown && toggleRow(row.symbol)} 
                 style={{ cursor: hasBreakdown ? "pointer" : "default" }}
                 className={isExpanded ? "row-expanded" : ""}
               >
-                <td>
-                  <strong>{row.symbol}</strong>
-                </td>
+                <td><strong>{row.symbol}</strong></td>
                 <td>{formatNumber(row.series_a_oi)}</td>
                 <td>{formatNumber(row.series_b_oi)}</td>
-                
                 <td>
                   {hasBreakdown && (
                     <span style={{ marginRight: "8px", display: "inline-block", width: "12px", fontSize: "10px", color: "inherit" }}>
@@ -129,21 +106,14 @@ function MarketTable({ data }) {
                   )}
                   {formatNumber(row.combined_oi)}
                 </td>
-
                 <td>
-                  {row.normal_eligibility} / {row.recall_eligibility} /{" "}
-                  {row.repay_eligibility}
+                  {row.normal_eligibility} / {row.recall_eligibility} / {row.repay_eligibility}
                 </td>
                 <td>
-                  <span
-                    className={`status-dot ${
-                      row.risk_status === "MANDATORY FORECLOSURE" ? "red" : "blue"
-                    }`}
-                  />
+                  <span className={`status-dot ${row.risk_status === "MANDATORY FORECLOSURE" ? "red" : "blue"}`} />
                   {row.risk_status}
                 </td>
               </tr>
-
 
               {isExpanded && hasBreakdown && (
                 <tr className="breakdown-row" style={{ backgroundColor: "#f9fafb" }}>
@@ -155,7 +125,6 @@ function MarketTable({ data }) {
                           {Object.entries(row.series_breakdown).map(([series, val]) => (
                             <tr key={series} style={{ background: "transparent" }}>
                               <td style={{ padding: "4px 0", fontWeight: "600", color: "#6b7280" }}>Series {series}:</td>
-                          
                               <td style={{ padding: "4px 0", textAlign: "right", fontFamily: "monospace", color: "#111827" }}>
                                 {formatNumber(val)}
                               </td>
@@ -199,28 +168,39 @@ function ChangesTable({ changes }) {
 }
 
 function App() {
-  const today = new Date();
-  const yesterday = new Date(today);
-  yesterday.setDate(yesterday.getDate() - 1);
-
   const [todayData, setTodayData] = useState([]);
   const [yesterdayData, setYesterdayData] = useState([]);
+  
+  // State variables tracking api-driven dates instead of system time
+  const [latestDate, setLatestDate] = useState(null);
+  const [previousDate, setPreviousDate] = useState(null);
 
   useEffect(() => {
-    const todayDate = new Date();
-    const yesterdayDate = new Date(todayDate);
-    yesterdayDate.setDate(yesterdayDate.getDate() - 1);
+    fetch(`${API_BASE}/api/latest-date`)
+      .then((r) => r.json())
+      .then(({ date }) => {
+        // Appending 'T00:00:00' prevents timezone shifts causing date errors locally
+        const currentLatest = new Date(date + "T00:00:00");
+        const currentPrevious = new Date(currentLatest);
+        currentPrevious.setDate(currentPrevious.getDate() - 1);
 
-    const todayStr = formatApiDate(todayDate);
-    const yesterdayStr = formatApiDate(yesterdayDate);
+        // Commit dates to state for rendering in headers
+        setLatestDate(currentLatest);
+        setPreviousDate(currentPrevious);
 
-    Promise.all([
-      fetch(`${API_BASE}/api/market/${todayStr}`).then((r) => r.json()),
-      fetch(`${API_BASE}/api/market/${yesterdayStr}`).then((r) => r.json()),
-    ]).then(([todayJson, yesterdayJson]) => {
-      setTodayData(todayJson);
-      setYesterdayData(yesterdayJson);
-    });
+        const todayStr = formatApiDate(currentLatest);
+        const yesterdayStr = formatApiDate(currentPrevious);
+
+        return Promise.all([
+          fetch(`${API_BASE}/api/market/${todayStr}`).then((r) => r.json()),
+          fetch(`${API_BASE}/api/market/${yesterdayStr}`).then((r) => r.json()),
+        ]);
+      })
+      .then(([todayJson, yesterdayJson]) => {
+        setTodayData(todayJson);
+        setYesterdayData(yesterdayJson);
+      })
+      .catch((err) => console.error("Error fetching market data:", err));
   }, []);
 
   const changes = getChanges(todayData, yesterdayData);
@@ -229,13 +209,13 @@ function App() {
     <div className="dashboard">
       <div className="left">
         <section>
-          <h2>Today&apos;s Market - {formatHeadingDate(today)}</h2>
+          <h2>Latest Market - {formatHeadingDate(latestDate)}</h2>
           <div className="table-box">
             <MarketTable data={todayData} />
           </div>
         </section>
         <section>
-          <h2>Yesterday&apos;s Market - {formatHeadingDate(yesterday)}</h2>
+          <h2>Previous Market - {formatHeadingDate(previousDate)}</h2>
           <div className="table-box">
             <MarketTable data={yesterdayData} />
           </div>

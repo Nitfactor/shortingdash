@@ -57,3 +57,10 @@ def eligible_securities(date: Date, db: Session = Depends(get_db)):
 @app.get("/api/market/{date}")
 def complete_market_data(date: Date, db: Session = Depends(get_db)):
     return get_market_data(date, db)
+
+@app.get("/api/latest-date")
+def latest_date(db: Session = Depends(get_db)):
+    result = db.query(OpenPositions.date).order_by(OpenPositions.date.desc()).first()
+    if result:
+        return {"date": result.date}
+    return{"date": None}

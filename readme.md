@@ -22,7 +22,7 @@ Backend: Python, FastAPI, Pandas
 
 Database: PostgreSQL (with daily snapshot partitioning)
 
-Frontend: React / Next.js, 
+Frontend: React / Next.js, (*Made with AI*)
 
 ## Disclaimer
 This project is for educational and research purposes only. It is not a trading platform, does not provide investment advice, and is not affiliated with the National Stock Exchange (NSE), Securities and Exchange Board of India (SEBI), or any licensed stockbroker.

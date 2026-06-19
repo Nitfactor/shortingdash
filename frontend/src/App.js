@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
+import { Analytics } from "@vercel/analytics/react"; // Cleanly imported
 
 const API_BASE = process.env.REACT_APP_API_BASE_URL || import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
 
@@ -167,11 +168,10 @@ function ChangesTable({ changes }) {
   );
 }
 
-function App() {
+
+export default function App() {
   const [todayData, setTodayData] = useState([]);
   const [yesterdayData, setYesterdayData] = useState([]);
-  
-  // State variables tracking api-driven dates instead of system time
   const [latestDate, setLatestDate] = useState(null);
   const [previousDate, setPreviousDate] = useState(null);
 
@@ -179,12 +179,10 @@ function App() {
     fetch(`${API_BASE}/api/latest-date`)
       .then((r) => r.json())
       .then(({ date }) => {
-        // Appending 'T00:00:00' prevents timezone shifts causing date errors locally
         const currentLatest = new Date(date + "T00:00:00");
         const currentPrevious = new Date(currentLatest);
         currentPrevious.setDate(currentPrevious.getDate() - 1);
 
-        // Commit dates to state for rendering in headers
         setLatestDate(currentLatest);
         setPreviousDate(currentPrevious);
 
@@ -207,6 +205,9 @@ function App() {
 
   return (
     <div className="dashboard">
+      {}
+      <Analytics /> 
+
       <div className="left">
         <section>
           <h2>Latest Market - {formatHeadingDate(latestDate)}</h2>
@@ -232,5 +233,3 @@ function App() {
     </div>
   );
 }
-
-export default App;

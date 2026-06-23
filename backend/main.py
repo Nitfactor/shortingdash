@@ -32,16 +32,16 @@ def startup():
     create_tables()
 
 @app.post("/ingest")
-def ingest(db: Session = Depends(get_db)):
+def ingest(date: Date, db: Session = Depends(get_db)):
 
     base_dir = Path(__file__).resolve().parent
     file_path_1 = base_dir / "data" / "eligible.csv"
     file_path_2 = base_dir / "data" / "foreclosure.CSV"
     file_path_3 = base_dir / "data" / "openpos.csv"
 
-    ingest_eligible_securities(file_path=file_path_1, date=Date.today(), db=db)
-    ingest_foreclosure(file_path=file_path_2, date=Date.today(), db=db)
-    ingest_open_positions(file_path=file_path_3, date=Date.today(), db=db)
+    ingest_eligible_securities(file_path=file_path_1, date=date, db=db)
+    ingest_foreclosure(file_path=file_path_2, date=date, db=db)
+    ingest_open_positions(file_path=file_path_3, date=date, db=db)
 
 @app.get("/api/open-positions/{date}")
 def open_position(date: Date, db: Session = Depends(get_db)):

@@ -77,10 +77,10 @@ function MarketTable({ data }) {
       <thead>
         <tr>
           <th>Symbol</th>
-          <th>Series A (Can be terminated early)<br />Open Interest</th>
+          <th>Series A (Recallable)<br />Open Interest</th>
           <th>Series B (Fixed)<br />Open Interest</th>
           <th>Combined<br />Total OI</th>
-          <th>Eligibility<br />(Normal / Recall / Repay)</th>
+          <th>Eligibility<br />(N / Recall / Repay)</th>
           <th>Operational Risk<br />Profiler Status</th>
         </tr>
       </thead>

@@ -1,0 +1,184 @@
+.page {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  background: #0a0a0a;
+  color: #e8e8e8;
+}
+
+.page-content {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 64px 32px 80px;
+}
+
+.page-content h1 {
+  margin: 0 0 12px;
+  font-family: "Inter", "IBM Plex Sans", sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #e8e8e8;
+  letter-spacing: -0.01em;
+}
+
+.page-subtitle {
+  margin: 0 0 48px;
+  font-family: "Inter", "IBM Plex Sans", sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+  color: #666666;
+}
+
+.page-section {
+  margin-bottom: 48px;
+}
+
+.page-section h2 {
+  margin: 0 0 20px;
+  font-family: "Inter", "IBM Plex Sans", sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #e8e8e8;
+}
+
+.page-section > p {
+  margin: 0 0 20px;
+  font-family: "Inter", "IBM Plex Sans", sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+  color: #e8e8e8;
+}
+
+.page-content > p {
+  margin: 0 0 20px;
+  font-family: "Inter", "IBM Plex Sans", sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+  color: #e8e8e8;
+}
+
+.page-callout {
+  margin: 0 0 20px;
+  padding: 0 0 0 16px;
+  border-left: 2px solid #c8a84b;
+  background: transparent;
+}
+
+.page-callout strong {
+  display: block;
+  margin-bottom: 8px;
+  font-family: "Inter", "IBM Plex Sans", sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #e8e8e8;
+}
+
+.page-callout p {
+  margin: 0;
+  font-family: "Inter", "IBM Plex Sans", sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+  color: #666666;
+}
+
+.page-list {
+  margin: 0 0 20px;
+  padding-left: 20px;
+  font-family: "Inter", "IBM Plex Sans", sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+  color: #e8e8e8;
+}
+
+.page-list li {
+  margin-bottom: 8px;
+}
+
+.page-list--ordered {
+  padding-left: 24px;
+}
+
+.page-card .page-list {
+  margin-bottom: 0;
+}
+
+.page-table-wrap {
+  overflow-x: auto;
+  margin-bottom: 20px;
+}
+
+.page-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: "Inter", "IBM Plex Sans", sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.page-table th,
+.page-table td {
+  padding: 10px 14px;
+  text-align: left;
+  border: none;
+  border-bottom: 1px solid #1e1e1e;
+  color: #e8e8e8;
+}
+
+.page-table th {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #666666;
+  background: transparent;
+}
+
+.page-table td strong {
+  color: #e8e8e8;
+  font-weight: 600;
+}
+
+.page-footer {
+  margin-top: 64px;
+  padding-top: 24px;
+  border-top: 1px solid #1e1e1e;
+  font-family: "Inter", "IBM Plex Sans", sans-serif;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #666666;
+  text-align: center;
+}
+
+.page-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 32px;
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.page-grid--facts {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.page-card {
+  border: none;
+  padding: 0;
+  background: transparent;
+}
+
+.page-card h3 {
+  margin: 0 0 12px;
+  font-family: "Inter", "IBM Plex Sans", sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #e8e8e8;
+}
+
+.page-card p {
+  margin: 0;
+  font-family: "Inter", "IBM Plex Sans", sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+  color: #666666;
+}

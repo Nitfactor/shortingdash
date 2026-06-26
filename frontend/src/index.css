@@ -7,12 +7,16 @@ body,
 
 body {
   margin: 0;
-  background: #000;
+  background: #0a0a0a;
+  color: #e8e8e8;
+  font-family: "Inter", "IBM Plex Sans", -apple-system, BlinkMacSystemFont,
+    sans-serif;
+  font-size: 13px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+code,
+.mono {
+  font-family: "IBM Plex Mono", "Courier New", monospace;
 }

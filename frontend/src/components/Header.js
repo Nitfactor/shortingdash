@@ -16,7 +16,7 @@ export default function Header() {
           About
         </NavLink>
         <a
-          href="https://x.com"
+          href="https://x.com/ShortingDash"
           target="_blank"
           rel="noopener noreferrer"
           className="header-social"
